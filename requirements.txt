@@ -1,5 +1,7 @@
 numpy
 pandas
+igraph
+plotly
 networkx
 ipykernel
 matplotlib
