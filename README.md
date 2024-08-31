@@ -3,7 +3,7 @@
 CodeFlowMapper is an open-source tool that generates 3D visualizations of Python codebases, helping developers quickly understand and navigate complex projects.
 
 ## How does it look?
-![CodeFlowMapper](CodeFlowMapper.mp4)
+![CodeFlowMapper](https://github.com/user-attachments/assets/58cf8de9-bf0f-4af7-8c73-8c379ed48320)
 
 ## Features
 
