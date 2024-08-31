@@ -1,54 +1,63 @@
 # CodeFlowMapper
 
-## What is CodeFlowMapper?
-
-CodeFlowMapper is an open-source tool designed to help developers quickly understand and visualize Python codebases. It generates a 3D visualization of all the files in the codebase, and for every file(parent node) you can see all the functions(child nodes) inside that file. This visualization can help developers quickly understand the structure of a codebase, and identify relationships between different files and functions.
-
-## How to run CodeFlowMapper?
-To run CodeFlowMapper, you can use the following command-line interface:
-1. Create a virtual environment using the following command:
-```bash
-$ python3 -m venv venv
-``` 
-2. Activate the virtual environment:
-```bash
-$ source venv/bin/activate
-```
-3. Install the required dependencies:
-```bash
-$ pip install -r requirements.txt
-```
-4. Run the CodeFlowMapper script:
-```bash
-$ python main.py
-```
-After running the script, the model will be downloaded and after that you will be prompted to enter the path of the file or directory you want to visualize. 
-
-Also you'll be prompted to enter directories you want to omit from the visualization (for example: `tests` , `__pycache__`, etc).
-
-Then flask server will be started and you can access the visualization at http://localhost:5000.
-
-HAPPY VISUALIZING! 
+CodeFlowMapper is an open-source tool that generates 3D visualizations of Python codebases, helping developers quickly understand and navigate complex projects.
 
 ## Features
 
-- Analyze single Python files or entire directories.
-- Obsidian like visualization.
-- Move around the 3D space and checks all the functions inside a specific file.
-- Support for Python projects (currently limited to Python files).
+- **3D Visualization**: Generate interactive 3D maps of your Python codebase.
+- **File and Function Mapping**: View files as parent nodes and functions as child nodes.
+- **Customizable Omissions**: Exclude specific directories from visualization.
+- **Obsidian-like Interface**: Familiar and intuitive visualization style.
+
+## Quick Start
+To run CodeFlowMapper, you can use the following command-line interface:
+1. Clone the repository and navigate to the project directory:
+```bash
+$ git clone https://github.com/Vishal-Padia/CodeFlowMapper
+$ cd CodeFlowMapper
+```
+2. Create a virtual environment using the following command:
+```bash
+$ python3 -m venv venv
+``` 
+3. Activate the virtual environment:
+```bash
+$ source venv/bin/activate
+```
+4. Install the required dependencies:
+```bash
+$ pip install -r requirements.txt
+```
+5. Run the CodeFlowMapper script:
+```bash
+$ python main.py
+```
+6. Follow the prompts to input your project path and exclude directories.
+
+7. Access the visualization at `http://localhost:5000`.
+
+HAPPY VISUALIZING! 
+
+## Usage
+
+- After launching, CodeFlowMapper will:
+- Download necessary models (first-time only).
+- Prompt for the path to your Python file or directory.
+- Ask for directories to exclude from the visualization.
+- Start a Flask server and generate the 3D visualization.
 
 ## Current Limitations
 
-- Only supports Python files and directories
-- Does not yet handle complex Python features like decorators or lambda functions
-- Limited to static analysis; dynamic code generation or evaluation is not supported
+- Python files and directories only
+- Basic Python feature support (no decorators or lambdas)
+- Static analysis only
 
-## Future Plans
+## Roadmap
 
-- Extend support to other programming languages (C, C++, JavaScript, Go, Rust, etc.)
-- Improve visualization options and interactivity.
-- Add support for more complex Python language features.
-- Explain with AI model.
+- [ ] Add support for more programming languages
+- [ ] Enhance visualization with more features
+- [ ] Complex Python feature support
+- [ ] AI-Powered Code Analysis
 
 ## Contributing
 We welcome contributions to CodeFlowMapper! If you have suggestions for improvements or bug fixes, please feel free to:
