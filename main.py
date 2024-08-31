@@ -2,11 +2,16 @@ import os
 import ast
 import flask
 import networkx as nx
-from flask import Flask, render_template_string, jsonify
+from flask import Flask, render_template_string, jsonify, request
+from transformers import pipeline
 
 app = Flask(__name__)
 
 G = None
+code_contents = {}
+
+# Initialize the code explanation model
+explainer = pipeline("text2text-generation", model="facebook/bart-large-cnn")
 
 
 def network_to_visjs(G):
@@ -39,7 +44,9 @@ def parse_directory(directory_path: str, omit_dirs: list):
 
 def parse_file(file_path: str):
     with open(file_path, "r", encoding="utf-8") as f:
-        tree = ast.parse(f.read())
+        content = f.read()
+        code_contents[file_path] = content
+        tree = ast.parse(content)
     return tree
 
 
@@ -80,16 +87,29 @@ def index():
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Obsidian-style Graph Visualization</title>
+            <title>Obsidian-style Graph with Code Display</title>
             <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
             <style type="text/css">
-                body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #1E1E1E; }
-                #mynetwork { width: 100%; height: 100%; }
+                body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #1E1E1E; color: #FFFFFF; font-family: Arial, sans-serif; }
+                #container { display: flex; width: 100%; height: 100%; }
+                #mynetwork { flex: 1; height: 100%; }
+                #sidepanel { width: 0; height: 100%; overflow-y: auto; background-color: #2C2C2C; transition: width 0.5s; }
+                #code-display { padding: 20px; white-space: pre-wrap; font-family: monospace; }
+                #explain-button { margin: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+                #explanation { padding: 20px; background-color: #3C3C3C; margin-top: 20px; border-radius: 5px; }
             </style>
         </head>
         <body>
-            <div id="mynetwork"></div>
+            <div id="container">
+                <div id="mynetwork"></div>
+                <div id="sidepanel">
+                    <pre id="code-display"></pre>
+                    <button id="explain-button">Explain with AI</button>
+                    <div id="explanation"></div>
+                </div>
+            </div>
             <script type="text/javascript">
+                let network;
                 fetch('/graph_data')
                     .then(response => response.json())
                     .then(data => {
@@ -119,7 +139,35 @@ def index():
                             },
                             interaction: { hover: true }
                         };
-                        var network = new vis.Network(container, data, options);
+                        network = new vis.Network(container, data, options);
+                        
+                        network.on("click", function (params) {
+                            if (params.nodes.length > 0) {
+                                const nodeId = params.nodes[0];
+                                fetch(`/get_code?node=${nodeId}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        document.getElementById('code-display').textContent = data.code;
+                                        document.getElementById('sidepanel').style.width = '40%';
+                                        document.getElementById('explanation').textContent = '';
+                                    });
+                            }
+                        });
+                        
+                        # document.getElementById('explain-button').addEventListener('click', function() {
+                        #     const code = document.getElementById('code-display').textContent;
+                        #     fetch('/explain_code', {
+                        #         method: 'POST',
+                        #         headers: {
+                        #             'Content-Type': 'application/json',
+                        #         },
+                        #         body: JSON.stringify({code: code}),
+                        #     })
+                        #     .then(response => response.json())
+                        #     .then(data => {
+                        #         document.getElementById('explanation').textContent = data.explanation;
+                        #     });
+                        # });
                     });
             </script>
         </body>
@@ -133,10 +181,26 @@ def graph_data():
     return jsonify(network_to_visjs(G))
 
 
+@app.route("/get_code")
+def get_code():
+    node = request.args.get("node")
+    code = code_contents.get(node, f"No code available for {node}")
+    return jsonify({"code": code})
+
+
+@app.route("/explain_code", methods=["POST"])
+def explain_code():
+    code = request.json["code"]
+    explanation = explainer(
+        f"Explain this code:\n{code}", max_length=500, min_length=100, do_sample=False
+    )[0]["generated_text"]
+    return jsonify({"explanation": explanation})
+
+
 def run_flask_app():
     print("Starting the web server.")
     print(
-        "Please open a web browser and go to http://127.0.0.1:5000/ to view the Obsidian-style graph visualization."
+        "Please open a web browser and go to http://127.0.0.1:5000/ to view the Obsidian-style graph visualization with code display and AI explanation."
     )
     app.run(debug=True)
 
