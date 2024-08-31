@@ -2,6 +2,9 @@
 
 CodeFlowMapper is an open-source tool that generates 3D visualizations of Python codebases, helping developers quickly understand and navigate complex projects.
 
+## How does it look?
+![CodeFlowMapper]()
+
 ## Features
 
 - **3D Visualization**: Generate interactive 3D maps of your Python codebase.
@@ -36,11 +39,13 @@ $ python main.py
 
 7. Access the visualization at `http://localhost:5000`.
 
+ **It takes some time to generate the visualization, so please be patient.**
 HAPPY VISUALIZING! 
+
 
 ## Usage
 
-- After launching, CodeFlowMapper will:
+After launching, CodeFlowMapper will:
 - Download necessary models (first-time only).
 - Prompt for the path to your Python file or directory.
 - Ask for directories to exclude from the visualization.
@@ -53,11 +58,10 @@ HAPPY VISUALIZING!
 - Static analysis only
 
 ## Roadmap
-
 - [ ] Add support for more programming languages
 - [ ] Enhance visualization with more features
 - [ ] Complex Python feature support
-- [ ] AI-Powered Code Analysis
+- [x] AI-Powered Code Analysis
 
 ## Contributing
 We welcome contributions to CodeFlowMapper! If you have suggestions for improvements or bug fixes, please feel free to:
