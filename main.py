@@ -212,21 +212,21 @@ def index():
                                     });
                             }
                         });
-                        
-                        # document.getElementById('explain-button').addEventListener('click', function() {
-                        #     const code = document.getElementById('code-display').textContent;
-                        #     fetch('/explain_code', {
-                        #         method: 'POST',
-                        #         headers: {
-                        #             'Content-Type': 'application/json',
-                        #         },
-                        #         body: JSON.stringify({code: code}),
-                        #     })
-                        #     .then(response => response.json())
-                        #     .then(data => {
-                        #         document.getElementById('explanation').textContent = data.explanation;
-                        #     });
-                        # });
+
+                        document.getElementById('explain-button').addEventListener('click', function() {
+                            const code = document.getElementById('code-display').textContent;
+                            fetch('/explain_code', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({code: code}),
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                document.getElementById('explanation').textContent = data.explanation;
+                            });
+                        });
                     });
             </script>
         </body>
